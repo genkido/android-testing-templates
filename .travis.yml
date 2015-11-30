@@ -14,8 +14,7 @@ before_script:
   - emulator -avd test -no-skin -no-audio -no-window &
   - adb wait-for-device
   - adb shell input keyevent 82 &
-
+  - cd AndroidTestingBlueprint
 script: 
-- ./AndroidTestingBlueprint/gradlew app
-- ./AndroidTestingBlueprint/gradlew app:AndroidLibraryModuleIntegrationTest
-
+  - ./gradlew assembleDebug
+  - ./gradlew app:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.example.android.testing.blueprint.integration.OkTest
