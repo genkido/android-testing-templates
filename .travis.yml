@@ -3,10 +3,18 @@ jdk: oraclejdk7
 env:
   matrix:
     - ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
+  global:
+    - TERM=dumb
 
 android:
   components:
-    - build-tools-19.0.0
+    - build-tools-23.0.1
+    - extra-android-support
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - android-19
+    - android-23
+    - sys-img-armeabi-v7a-android-19
 
 before_script:
   # Create and start emulator
@@ -15,6 +23,14 @@ before_script:
   - adb wait-for-device
   - adb shell input keyevent 82 &
   - cd AndroidTestingBlueprint
+
+before_cache:
+  - rm -f AndroidTestingBlueprint/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - AndroidTestingBlueprint/.gradle/caches/
+    - AndroidTestingBlueprint/.gradle/wrapper/
+
 script: 
   - ./gradlew assembleDebug
   - ./gradlew app:connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.example.android.testing.blueprint.integration.OkTest
